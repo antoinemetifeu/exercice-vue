@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
-
-// Importer votre module ici et l'ajouter au Store (ligne 19)
+import tasks from "./tasks";
 
 Vue.use(Vuex);
 
@@ -13,7 +12,7 @@ Vue.use(Vuex);
 export default function(/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      // Votre module ici (mettre une virgule à la fin de la ligne 18)
+      tasks,
     },
 
     // enable strict mode (adds overhead!)
