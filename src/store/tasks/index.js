@@ -1,5 +1,5 @@
 // import actions from "./actions";
-// import getters from "./getters";
+import getters from "./getters";
 // import mutations from "./mutations";
 import state from "./state";
 
@@ -8,5 +8,5 @@ export default {
   state,
   // actions,
   // mutations,
-  // getters,
+  getters,
 };
