@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-lg">
     <div class="row q-gutter-lg">
-      <dishe v-for="dishe in dishes" :key="dishe.id" :dishe="dishe" />
+      <dishe v-for="dishe in dishes" :key="dishe.id" :dishe="dishe" @delete="deleteDishe" />
 
       <add-button @click="showFormDishe = true" />
 
@@ -13,11 +13,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   computed: {
     ...mapGetters("tasks", ["dishes"]),
+  },
+  methods: {
+    ...mapActions("tasks", ["deleteDishe"]),
   },
   data() {
     return {
