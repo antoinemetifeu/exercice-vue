@@ -6,13 +6,29 @@
 
     <q-card-section>
       <div class="row q-mb-md">
-        <q-input filled v-model="dishe.name" label="Nom (Burger)" class="col" />
+        <q-input
+          ref="name"
+          filled
+          v-model="dishe.name"
+          :rules="[
+            val => !!val || 'Le nom est obligatoire',
+            val => val.length <= 20 || 'Le nom ne doit pas dépasser 20 caractères'
+          ]"
+          lazy-rules="ondemand"
+          label="Nom (Burger)"
+          class="col"
+        />
       </div>
 
       <div class="row q-mb-md">
         <q-input
+          ref="description"
           filled
           v-model="dishe.description"
+          :rules="[
+            val => val.length <= 125 || 'La description ne doit pas dépasser 135 caractères'
+          ]"
+          lazy-rules="ondemand"
           label="Description"
           type="textarea"
           class="col"
@@ -45,7 +61,7 @@
 
     <q-card-actions align="right">
       <q-btn label="Annuler" color="grey" v-close-popup />
-      <q-btn label="Sauver" color="primary" v-close-popup />
+      <q-btn label="Sauver" color="primary" @click="save" />
     </q-card-actions>
   </q-card>
 </template>
@@ -62,6 +78,31 @@ export default {
         image: ""
       }
     };
+  },
+  methods: {
+    save() {
+      /*
+       * Probably a best choice to add a q-form component & call validate method on it
+       * or even better to use a validation library like Vuelidate
+       */
+      this.$refs.name.validate()
+      this.$refs.description.validate()
+
+      if (this.$refs.name.hasError || this.$refs.description.hasError) {
+        this.$q.notify({
+        icon: 'error',
+        color: 'negative',
+        message: 'Erreur de saisie'
+      })
+        return
+      }
+
+      this.$q.notify({
+        icon: 'done',
+        color: 'positive',
+        message: 'Submitted'
+      })
+    }
   }
 };
 </script>
