@@ -67,8 +67,11 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+import { ADD_DISHE, EDIT_DISHE } from "../store/tasks/mutation-types";
+
 export default {
-  props: ["action"],
+  props: ["action", "disheToEdit"],
   data() {
     return {
       dishe: {
@@ -79,8 +82,15 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapGetters("tasks", { disheById: "dishe" })
+  },
   methods: {
-    save() {
+    ...mapMutations("tasks", {
+      addDishe: ADD_DISHE,
+      editDishe: EDIT_DISHE,
+    }),
+    isValid() {
       /*
        * Probably a best choice to add a q-form component & call validate method on it
        * or even better to use a validation library like Vuelidate
@@ -89,19 +99,39 @@ export default {
       this.$refs.description.validate()
 
       if (this.$refs.name.hasError || this.$refs.description.hasError) {
+        return false;
+      }
+
+      return true;
+    },
+    save() {
+      if (!this.isValid()) {
         this.$q.notify({
-        icon: 'error',
-        color: 'negative',
-        message: 'Erreur de saisie'
-      })
+          icon: 'error',
+          color: 'negative',
+          message: 'Erreur de saisie'
+        })
         return
+      }
+
+      if (this.action === "add") {
+        this.addDishe(this.dishe)
+      } else {
+        this.editDishe(this.dishe)
       }
 
       this.$q.notify({
         icon: 'done',
         color: 'positive',
-        message: 'Submitted'
+        message: this.action === "add" ? "Plat ajouté !" : "Plat modifié !"
       })
+    },
+  },
+  watch: {
+    disheToEdit: {
+      handler(newDishe) {
+        this.dishe = {...this.dishe, ...newDishe}
+      }, immediate: true
     }
   }
 };

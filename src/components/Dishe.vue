@@ -41,7 +41,7 @@
     </q-dialog>
 
     <q-dialog v-model="showFormDishe">
-      <form-dishe action="modifier" />
+      <form-dishe action="modifier" :dishe-to-edit="dishe" />
     </q-dialog>
   </q-card>
 </template>
