@@ -1,6 +1,6 @@
 <template>
   <q-card class="card">
-    <q-img :src="dishe.image" basic contain>
+    <q-img :src="image" basic contain>
       <div class="absolute-bottom text-h6">
         {{ dishe.name }}
       </div>
@@ -16,8 +16,8 @@
       />
     </q-card-section>
 
-    <q-card-section>
-      {{ dishe.description }}
+    <q-card-section :class="{ 'text-italic' : !dishe.description }">
+      {{ description }}
     </q-card-section>
 
     <q-card-actions class="absolute-bottom" align="right">
@@ -54,6 +54,14 @@ export default {
       showConfirmDelete: false,
       showFormDishe: false
     };
+  },
+  computed: {
+    image() {
+      return this.dishe.image || "statics/image-placeholder.png"
+    },
+    description() {
+      return this.dishe.description || "Aucune description fournie"
+    }
   },
   components: {
     "form-dishe": require("components/FormDishe.vue").default
