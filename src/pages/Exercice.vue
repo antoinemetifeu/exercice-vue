@@ -1,19 +1,21 @@
 <template>
   <q-page class="q-pa-lg">
-    <div class="row q-gutter-lg">
-      <dishe v-for="dishe in dishes" :key="dishe.id" :dishe="dishe" @delete="deleteDishe" />
+    <q-pull-to-refresh @refresh="refresh">
+      <div class="row q-gutter-lg">
+        <dishe v-for="dishe in dishes" :key="dishe.id" :dishe="dishe" @delete="deleteDishe" />
 
-      <add-button @click="showFormDishe = true" />
+        <add-button @click="showFormDishe = true" />
 
-      <q-dialog v-model="showFormDishe">
-        <form-dishe action="add" />
-      </q-dialog>
-    </div>
+        <q-dialog v-model="showFormDishe">
+          <form-dishe action="add" />
+        </q-dialog>
+      </div>
+    </q-pull-to-refresh>
   </q-page>
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 export default {
   computed: {
@@ -21,6 +23,16 @@ export default {
   },
   methods: {
     ...mapActions("tasks", ["deleteDishe"]),
+    ...mapMutations("tasks", {
+      resetDishes: "RESET_DISHES",
+    }),
+    refresh (done) {
+      /* setTimeout is here to simulate a long refresh */
+      setTimeout(() => {
+        this.resetDishes()
+        done()
+      }, 1500)
+    },
   },
   data() {
     return {
